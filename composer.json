@@ -1,0 +1,29 @@
+{
+    "name": "starisian/sparxstar-policy-domain-renderer",
+    "description": "SPARXSTAR Policy Domain Renderer — turns one WordPress multisite subsite into a centralized policy site, rendering placeholder-based policies per requesting domain.",
+    "type": "wordpress-plugin",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Starisian Technologies",
+            "homepage": "https://starisian.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Starisian\\Sparxstar\\PolicyRenderer\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "8.2"
+        }
+    },
+    "extra": {
+        "wordpress-plugin": true
+    }
+}

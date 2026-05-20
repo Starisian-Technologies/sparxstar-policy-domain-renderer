@@ -1,0 +1,13 @@
+# Composer dependencies — not committed; install locally or in CI
+vendor/
+composer.lock
+
+# Build artifacts
+*.zip
+*.tar.gz
+
+# IDE / OS files
+.DS_Store
+.idea/
+.vscode/
+*.swp
