@@ -1,6 +1,5 @@
 # Composer dependencies — not committed; install locally or in CI
 vendor/
-composer.lock
 
 # Build artifacts
 *.zip
