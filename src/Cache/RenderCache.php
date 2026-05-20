@@ -140,8 +140,10 @@ final class RenderCache {
 		WP_Post $policy_post,
 		WP_Post $profile
 	): string {
-		$policy_ts  = gmdate( 'YmdHis', strtotime( $policy_post->post_modified_gmt ) ?: 0 );
-		$profile_ts = gmdate( 'YmdHis', strtotime( $profile->post_modified_gmt ) ?: 0 );
+		// Use the stored GMT timestamp directly; normalize by stripping punctuation so
+		// the cache key is URL-safe.  Avoids double conversion via strtotime/gmdate.
+		$policy_ts  = str_replace( [ '-', ' ', ':' ], '', $policy_post->post_modified_gmt );
+		$profile_ts = str_replace( [ '-', ' ', ':' ], '', $profile->post_modified_gmt );
 
 		return implode( ':', [
 			'spx_policy_rendered',

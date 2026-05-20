@@ -122,7 +122,15 @@ final class PlaceholderRenderer {
 	}
 
 	/**
-	 * Builds a multi-line plain-text address block from individual address fields.
+	 * Builds a multi-line address block from individual address fields.
+	 *
+	 * Address fields are separated by a line break so that the rendered output
+	 * respects typical postal address formatting.  The caller is responsible for
+	 * appropriate escaping; this value is HTML-escaped before insertion so the
+	 * newlines will not produce visible breaks in prose.  Authors should wrap
+	 * {{SITE_OWNER_ADDRESS}} in a <pre> or use individual field placeholders
+	 * ({{SITE_OWNER_ADDRESS_LINE_1}}, {{SITE_OWNER_CITY}}, etc.) when precise
+	 * per-line control is needed.
 	 *
 	 * @param WP_Post $profile Resolved profile post.
 	 *
@@ -138,7 +146,7 @@ final class PlaceholderRenderer {
 			(string) get_post_meta( $profile->ID, 'country', true ),
 		] );
 
-		return implode( ', ', $parts );
+		return implode( "\n", $parts );
 	}
 
 	/**

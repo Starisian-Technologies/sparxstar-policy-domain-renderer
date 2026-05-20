@@ -341,10 +341,14 @@ final class ProfileAdmin {
 		// Multi-line textarea fields → normalized string arrays.
 		foreach ( [ 'alias_domains', 'allowed_hosts' ] as $field ) {
 			if ( isset( $input[ $field ] ) ) {
-				$lines = array_filter(
-					array_map( 'sanitize_text_field', explode( "\n", (string) $input[ $field ] ) )
+				$normalized = array_values(
+					array_map(
+						'strtolower',
+						array_filter(
+							array_map( 'sanitize_text_field', explode( "\n", (string) $input[ $field ] ) )
+						)
+					)
 				);
-				$normalized = array_values( array_map( 'strtolower', $lines ) );
 				update_post_meta( $post_id, $field, $normalized );
 			}
 		}
