@@ -40,7 +40,7 @@ final class PolicyFileRepository {
 	 * Pattern that every valid policy ID must fully match.
 	 * Only lowercase letters a–z, digits 0–9, and hyphens are allowed.
 	 */
-	private const SAFE_ID_PATTERN = '/^[a-z0-9][a-z0-9\-]*$/';
+	private const SAFE_ID_PATTERN = '/^[a-z0-9][a-z0-9-]*$/';
 
 	/**
 	 * @param string $policies_dir Absolute path to the root policies directory.
