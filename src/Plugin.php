@@ -93,6 +93,10 @@ final class Plugin {
 	}
 
 	private function register_content_filters(): void {
+		if ( ! $this->is_primary_policy_site() ) {
+			return;
+		}
+
 		$host_normalizer      = new HostNormalizer();
 		$profile_resolver     = new ProfileResolver( $host_normalizer );
 		$placeholder_registry = new PlaceholderRegistry();
@@ -256,7 +260,7 @@ final class Plugin {
 		$clean = [];
 
 		if ( isset( $input['primary_policy_host'] ) ) {
-			$clean['primary_policy_host'] = sanitize_text_field( strtolower( (string) $input['primary_policy_host'] ) );
+			$clean['primary_policy_host'] = sanitize_text_field( strtolower( trim( (string) $input['primary_policy_host'] ) ) );
 		}
 
 		$clean['strip_www']           = ! empty( $input['strip_www'] );
@@ -406,5 +410,29 @@ final class Plugin {
 				'copied' => esc_html__( 'Copied!', 'sparxstar-policy-renderer' ),
 			]
 		);
+	}
+
+	/**
+	 * Returns true when the current site should act as the public policy site.
+	 *
+	 * When no primary host is configured, the plugin remains active for backward
+	 * compatibility and single-site installs.
+	 */
+	private function is_primary_policy_site(): bool {
+		$settings = get_option( 'spx_policy_settings', [] );
+		$primary  = is_array( $settings ) ? (string) ( $settings['primary_policy_host'] ?? '' ) : '';
+
+		if ( '' === $primary ) {
+			return true;
+		}
+
+		$current = (string) wp_parse_url( home_url( '/' ), PHP_URL_HOST );
+		if ( '' === $current ) {
+			return false;
+		}
+
+		$host_normalizer = new HostNormalizer();
+
+		return $host_normalizer->normalize( $current ) === $host_normalizer->normalize( $primary );
 	}
 }

@@ -20,9 +20,10 @@ use WP_Post;
  *
  * Resolution order:
  *  1. Match exact primary_domain.
- *  2. Match within the stored allowed_hosts array.
- *  3. Fall back to the configured default fallback profile.
- *  4. Return null if nothing matches.
+ *  2. Match within the stored alias_domains array.
+ *  3. Match within the stored allowed_hosts array.
+ *  4. Fall back to the configured default fallback profile.
+ *  5. Return null if nothing matches.
  */
 final class ProfileResolver {
 
@@ -108,6 +109,11 @@ final class ProfileResolver {
 					'compare' => '=',
 				],
 				[
+					'key'     => 'alias_domains',
+					'value'   => $host,
+					'compare' => 'LIKE',
+				],
+				[
 					'key'     => 'allowed_hosts',
 					'value'   => $host,
 					'compare' => 'LIKE',
@@ -152,15 +158,16 @@ final class ProfileResolver {
 			return true;
 		}
 
-		// Check allowed_hosts array (stored serialized by WordPress).
-		$allowed_hosts = get_post_meta( $profile->ID, 'allowed_hosts', true );
-		if ( ! is_array( $allowed_hosts ) ) {
-			return false;
-		}
+		foreach ( [ 'alias_domains', 'allowed_hosts' ] as $meta_key ) {
+			$hosts = get_post_meta( $profile->ID, $meta_key, true );
+			if ( ! is_array( $hosts ) ) {
+				continue;
+			}
 
-		foreach ( $allowed_hosts as $allowed ) {
-			if ( $this->host_normalizer->normalize( (string) $allowed ) === $host ) {
-				return true;
+			foreach ( $hosts as $allowed ) {
+				if ( $this->host_normalizer->normalize( (string) $allowed ) === $host ) {
+					return true;
+				}
 			}
 		}
 

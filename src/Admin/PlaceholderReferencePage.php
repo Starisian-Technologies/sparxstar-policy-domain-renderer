@@ -18,8 +18,7 @@ use Starisian\Sparxstar\PolicyRenderer\Content\PlaceholderRegistry;
 /**
  * Registers and renders the admin placeholder reference screen.
  *
- * Accessible at: Appearance > Policy Placeholders
- * (or via the top-level Policy Profiles menu).
+ * Accessible at: Policy Profiles > Placeholder Reference.
  */
 final class PlaceholderReferencePage {
 

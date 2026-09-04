@@ -36,7 +36,7 @@ final class Requirements {
 		$message = sprintf(
 			/* translators: 1: required PHP version, 2: required WordPress version */
 			esc_html__(
-				'SPARXSTAR Policy Domain Renderer requires PHP %1$s or higher and WordPress %2$s or higher. The plugin has been deactivated.',
+				'SPARXSTAR Policy Domain Renderer requires PHP %1$s or higher and WordPress %2$s or higher. The plugin was not loaded.',
 				'sparxstar-policy-renderer'
 			),
 			esc_html( self::MIN_PHP_VERSION ),

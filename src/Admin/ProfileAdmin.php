@@ -314,23 +314,36 @@ final class ProfileAdmin {
 			? wp_unslash( $_POST['spx_profile'] )
 			: [];
 
-		// Scalar text fields.
+		// Scalar profile fields.
 		$text_keys = [
-			'profile_key', 'legal_name', 'display_name', 'brand_name',
+			'legal_name', 'display_name', 'brand_name',
 			'platform_operator_name', 'site_owner_name', 'site_operator_name',
 			'seller_name', 'support_provider_name', 'primary_domain',
 			'address_line_1', 'address_line_2', 'city', 'state_region',
-			'postal_code', 'country', 'phone', 'email', 'support_email',
-			'legal_email', 'privacy_email', 'abuse_email', 'governing_law',
+			'postal_code', 'country', 'phone', 'governing_law',
 			'jurisdiction', 'business_registration_number', 'tax_id',
-			'dpo_name', 'dpo_email', 'privacy_contact_name', 'website_url',
-			'support_url', 'terms_url', 'privacy_url', 'refund_url', 'logo_url',
-			'robots_indexing', 'default_policy_set',
+			'dpo_name', 'privacy_contact_name', 'robots_indexing', 'default_policy_set',
 		];
 
 		foreach ( $text_keys as $key ) {
 			if ( isset( $input[ $key ] ) ) {
 				update_post_meta( $post_id, $key, sanitize_text_field( (string) $input[ $key ] ) );
+			}
+		}
+
+		if ( isset( $input['profile_key'] ) ) {
+			update_post_meta( $post_id, 'profile_key', sanitize_key( (string) $input['profile_key'] ) );
+		}
+
+		foreach ( [ 'email', 'support_email', 'legal_email', 'privacy_email', 'abuse_email', 'dpo_email' ] as $key ) {
+			if ( isset( $input[ $key ] ) ) {
+				update_post_meta( $post_id, $key, sanitize_email( (string) $input[ $key ] ) );
+			}
+		}
+
+		foreach ( [ 'website_url', 'support_url', 'terms_url', 'privacy_url', 'refund_url', 'logo_url' ] as $key ) {
+			if ( isset( $input[ $key ] ) ) {
+				update_post_meta( $post_id, $key, esc_url_raw( (string) $input[ $key ] ) );
 			}
 		}
 

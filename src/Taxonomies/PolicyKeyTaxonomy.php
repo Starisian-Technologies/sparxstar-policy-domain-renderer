@@ -70,8 +70,7 @@ final class PolicyKeyTaxonomy {
 
 		register_taxonomy( self::TAXONOMY, [ 'page', 'post' ], $args );
 
-		// Seed default terms on first activation (idempotent).
-		add_action( 'init', [ $this, 'seed_default_terms' ], 20 );
+		$this->seed_default_terms();
 	}
 
 	/**

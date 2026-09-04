@@ -214,6 +214,12 @@ final class PolicyContentFilter {
 			return;
 		}
 
+		$host    = $this->host_normalizer->get_current_host();
+		$profile = $this->profile_resolver->resolve( $host );
+		if ( null === $profile || ! $this->is_profile_cache_enabled( $profile ) ) {
+			return;
+		}
+
 		if ( ! is_user_logged_in() ) {
 			header( 'Cache-Control: public, max-age=300, s-maxage=86400' );
 		}
@@ -311,8 +317,10 @@ final class PolicyContentFilter {
 		$host        = $context['host'];
 		$policy_key  = $context['policy_key'];
 
-		// Only cache when a concrete policy post is known.
-		if ( null !== $policy_post ) {
+		$cache_enabled = $this->is_profile_cache_enabled( $profile );
+
+		// Only cache when a concrete policy post is known and the profile allows it.
+		if ( $cache_enabled && null !== $policy_post ) {
 			$cached = $this->render_cache->get( $host, $policy_key, $policy_post, $profile );
 			if ( null !== $cached ) {
 				return $cached;
@@ -323,7 +331,7 @@ final class PolicyContentFilter {
 		$rendered        = $this->placeholder_renderer->render( $content, $profile, $policy_post );
 		$this->rendering = false;
 
-		if ( null !== $policy_post ) {
+		if ( $cache_enabled && null !== $policy_post ) {
 			$this->render_cache->set( $host, $policy_key, $policy_post, $profile, $rendered );
 		}
 
@@ -369,5 +377,18 @@ final class PolicyContentFilter {
 		] );
 
 		return ! empty( $posts ) && $posts[0] instanceof WP_Post ? $posts[0] : null;
+	}
+
+	/**
+	 * Returns true when frontend caching is enabled for the given profile.
+	 *
+	 * Empty meta defaults to enabled for backward compatibility.
+	 *
+	 * @param WP_Post $profile Profile post.
+	 */
+	private function is_profile_cache_enabled( WP_Post $profile ): bool {
+		$cache_enabled = get_post_meta( $profile->ID, 'cache_enabled', true );
+
+		return ! in_array( $cache_enabled, [ '0', 'false', false, 0 ], true );
 	}
 }

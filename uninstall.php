@@ -26,7 +26,11 @@ if ( empty( $settings['delete_on_uninstall'] ) ) {
 delete_option( 'spx_policy_settings' );
 
 // --- Flush rendered object cache ---
-wp_cache_flush_group( 'spx_policy_renderer' );
+if ( function_exists( 'wp_cache_flush_group' ) ) {
+	wp_cache_flush_group( 'spx_policy_renderer' );
+} else {
+	wp_cache_flush();
+}
 
 // --- Remove all Policy Profile CPT posts and their meta ---
 $profiles = get_posts( [
