@@ -58,6 +58,7 @@ final class Plugin {
 		$this->register_post_types();
 		$this->register_taxonomies();
 		$this->register_content_filters();
+		$this->register_cache_invalidation_hooks();
 		$this->register_admin_hooks();
 		$this->load_textdomain();
 	}
@@ -127,7 +128,11 @@ final class Plugin {
 		// Cache-Control response headers.
 		add_action( 'template_redirect', [ $content_filter, 'send_cache_headers' ] );
 
-		// Cache invalidation.
+	}
+
+	private function register_cache_invalidation_hooks(): void {
+		$render_cache = new RenderCache();
+
 		add_action( 'save_post_spx_policy_profile', [ $render_cache, 'invalidate_on_profile_save' ], 10, 2 );
 		add_action( 'save_post_page',               [ $render_cache, 'invalidate_on_policy_save' ],  10, 2 );
 		add_action( 'save_post_post',               [ $render_cache, 'invalidate_on_policy_save' ],  10, 2 );
@@ -431,8 +436,21 @@ final class Plugin {
 			return false;
 		}
 
-		$host_normalizer = new HostNormalizer();
+		return $this->normalize_site_host( $current ) === $this->normalize_site_host( $primary );
+	}
 
-		return $host_normalizer->normalize( $current ) === $host_normalizer->normalize( $primary );
+	/**
+	 * Normalizes a site host for strict site-to-setting comparisons.
+	 *
+	 * Unlike request-host normalization, this intentionally does not alias away
+	 * a leading www. because the primary site host setting should match exactly.
+	 *
+	 * @param string $host Raw host value.
+	 */
+	private function normalize_site_host( string $host ): string {
+		$host = (string) preg_replace( '/:\d+$/', '', $host );
+		$host = strtolower( $host );
+
+		return rtrim( $host, '.' );
 	}
 }

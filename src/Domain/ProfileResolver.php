@@ -95,6 +95,8 @@ final class ProfileResolver {
 			return self::$cache[ $host ];
 		}
 
+		$serialized_host = '"' . $host . '"';
+
 		// Broad database query; exact validation happens in profile_allows_host().
 		$candidates = get_posts( [
 			'post_type'      => 'spx_policy_profile',
@@ -110,12 +112,12 @@ final class ProfileResolver {
 				],
 				[
 					'key'     => 'alias_domains',
-					'value'   => $host,
+					'value'   => $serialized_host,
 					'compare' => 'LIKE',
 				],
 				[
 					'key'     => 'allowed_hosts',
-					'value'   => $host,
+					'value'   => $serialized_host,
 					'compare' => 'LIKE',
 				],
 			],

@@ -90,12 +90,16 @@ final class PolicyContentFilter {
 		}
 
 		$this->rendering = true;
-		$rendered        = $this->placeholder_renderer->render(
-			$excerpt,
-			$context['profile'],
-			$context['policy_post']
-		);
-		$this->rendering = false;
+
+		try {
+			$rendered = $this->placeholder_renderer->render(
+				$excerpt,
+				$context['profile'],
+				$context['policy_post']
+			);
+		} finally {
+			$this->rendering = false;
+		}
 
 		return $rendered;
 	}
@@ -328,8 +332,12 @@ final class PolicyContentFilter {
 		}
 
 		$this->rendering = true;
-		$rendered        = $this->placeholder_renderer->render( $content, $profile, $policy_post );
-		$this->rendering = false;
+
+		try {
+			$rendered = $this->placeholder_renderer->render( $content, $profile, $policy_post );
+		} finally {
+			$this->rendering = false;
+		}
 
 		if ( $cache_enabled && null !== $policy_post ) {
 			$this->render_cache->set( $host, $policy_key, $policy_post, $profile, $rendered );
