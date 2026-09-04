@@ -49,10 +49,12 @@ final class PolicyFileRepositoryTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		$base = sys_get_temp_dir() . '/spx_policy_test_' . uniqid( '', true );
+		$base_parent = sys_get_temp_dir() . '/spx_policy_test_' . uniqid( '', true );
+		mkdir( $base_parent, 0777, true );
+
+		$base = $base_parent . '/policies';
 		mkdir( $base, 0777, true );
 		$this->policies_dir = $base;
-
 		// ── Happy-path fixture ──────────────────────────────────────────────
 		// A legitimately named profile that should be loadable.
 		mkdir( $base . '/valid-profile', 0777, true );
