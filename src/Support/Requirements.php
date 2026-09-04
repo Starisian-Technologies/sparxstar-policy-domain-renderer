@@ -33,7 +33,6 @@ final class Requirements {
 	 * Outputs an admin notice when requirements are not met.
 	 */
 	public static function admin_notice(): void {
-		$message = sprintf(
 			/* translators: 1: required PHP version, 2: required WordPress version */
 			esc_html__(
 				'SPARXSTAR Policy Domain Renderer requires PHP %1$s or higher and WordPress %2$s or higher. The plugin was not loaded.',
@@ -41,7 +40,6 @@ final class Requirements {
 			),
 			esc_html( self::MIN_PHP_VERSION ),
 			esc_html( self::MIN_WP_VERSION )
-		);
 
 		printf(
 			'<div class="notice notice-error"><p>%s</p></div>',
