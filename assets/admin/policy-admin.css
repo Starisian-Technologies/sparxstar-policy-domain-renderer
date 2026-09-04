@@ -1,0 +1,163 @@
+/**
+ * SPARXSTAR Policy Domain Renderer — Admin Styles
+ *
+ * © Starisian Technologies. All rights reserved.
+ */
+
+/* =========================================================================
+   Form tables
+   ========================================================================= */
+
+.spx-policy-form-table th {
+	width: 220px;
+	font-weight: 600;
+	padding: 12px 10px 12px 0;
+	vertical-align: top;
+}
+
+.spx-policy-form-table td {
+	padding: 8px 10px;
+	vertical-align: top;
+}
+
+.spx-policy-form-table .description {
+	margin-top: 4px;
+	color: #646970;
+	font-size: 12px;
+}
+
+/* =========================================================================
+   Active / inactive badges
+   ========================================================================= */
+
+.spx-active-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 3px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+.spx-active-badge--yes {
+	background-color: #d1fae5;
+	color: #065f46;
+}
+
+.spx-active-badge--no {
+	background-color: #fee2e2;
+	color: #991b1b;
+}
+
+/* =========================================================================
+   Placeholder reference page
+   ========================================================================= */
+
+.spx-placeholder-reference .spx-placeholder-copy-hint {
+	margin: 12px 0 16px;
+	padding: 10px 12px;
+	background: #f0f6fc;
+	border-left: 4px solid #2271b1;
+	color: #1d2327;
+	font-size: 13px;
+}
+
+.spx-placeholder-reference .spx-placeholder-copy-hint .dashicons {
+	vertical-align: text-bottom;
+	margin-right: 4px;
+	color: #2271b1;
+}
+
+.spx-placeholder-table code.spx-placeholder-token {
+	cursor: pointer;
+	display: inline-block;
+	padding: 3px 6px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 3px;
+	font-size: 12px;
+	transition: background 0.15s ease;
+	word-break: break-all;
+}
+
+.spx-placeholder-table code.spx-placeholder-token:hover {
+	background: #e5e5e5;
+}
+
+.spx-placeholder-table code.spx-placeholder-token.spx-copied {
+	background: #d1fae5;
+	border-color: #34d399;
+}
+
+/* Source badges */
+
+.spx-source-badge {
+	display: inline-block;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.spx-source-badge--profile {
+	background: #dbeafe;
+	color: #1e40af;
+}
+
+.spx-source-badge--policy {
+	background: #fef9c3;
+	color: #713f12;
+}
+
+/* Required / optional badges */
+
+.spx-required-badge {
+	display: inline-block;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	background: #fee2e2;
+	color: #991b1b;
+}
+
+.spx-optional-badge {
+	display: inline-block;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	background: #f3f4f6;
+	color: #374151;
+}
+
+/* =========================================================================
+   Policy settings meta box — conditional field visibility
+   ========================================================================= */
+
+.spx-field-profile_override,
+.spx-field-host_override,
+.spx-field-policy_set {
+	display: none;
+}
+
+.spx-scope-active-profile_override .spx-field-profile_override,
+.spx-scope-active-host_override    .spx-field-host_override,
+.spx-scope-active-host_override    .spx-field-profile_override,
+.spx-scope-active-policy_set       .spx-field-policy_set {
+	display: block;
+}
+
+/* =========================================================================
+   Missing placeholder admin warning (frontend)
+   ========================================================================= */
+
+.spx-policy-missing-placeholder {
+	background: #ff0;
+	color: #000;
+	padding: 0 4px;
+	font-weight: bold;
+	border-radius: 2px;
+}

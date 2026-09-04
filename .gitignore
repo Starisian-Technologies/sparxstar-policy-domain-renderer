@@ -1,0 +1,15 @@
+# Composer dependencies — not committed; install locally or in CI
+vendor/
+
+# PHPUnit runtime cache (regenerated on each run)
+.phpunit.result.cache
+
+# Build artifacts
+*.zip
+*.tar.gz
+
+# IDE / OS files
+.DS_Store
+.idea/
+.vscode/
+*.swp
