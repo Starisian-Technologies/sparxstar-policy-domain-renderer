@@ -326,9 +326,23 @@ final class ProfileAdmin {
 		];
 
 		foreach ( $text_keys as $key ) {
-			if ( isset( $input[ $key ] ) ) {
-				update_post_meta( $post_id, $key, sanitize_text_field( (string) $input[ $key ] ) );
+			if ( ! isset( $input[ $key ] ) ) {
+				continue;
 			}
+
+			$raw = (string) $input[ $key ];
+
+			$value = match ( $key ) {
+				// Emails.
+				'email', 'support_email', 'legal_email', 'privacy_email', 'abuse_email', 'dpo_email' => sanitize_email( $raw ),
+				// URLs.
+				'website_url', 'support_url', 'terms_url', 'privacy_url', 'refund_url', 'logo_url' => esc_url_raw( $raw ),
+				// Slug-like identifiers.
+				'profile_key' => sanitize_key( $raw ),
+				default       => sanitize_text_field( $raw ),
+			};
+
+			update_post_meta( $post_id, $key, $value );
 		}
 
 		if ( isset( $input['profile_key'] ) ) {
