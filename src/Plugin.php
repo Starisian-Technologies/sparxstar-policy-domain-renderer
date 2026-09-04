@@ -265,7 +265,9 @@ final class Plugin {
 		$clean = [];
 
 		if ( isset( $input['primary_policy_host'] ) ) {
-			$clean['primary_policy_host'] = sanitize_text_field( strtolower( trim( (string) $input['primary_policy_host'] ) ) );
+			$clean['primary_policy_host'] = $this->normalize_site_host(
+				sanitize_text_field( trim( (string) $input['primary_policy_host'] ) )
+			);
 		}
 
 		$clean['strip_www']           = ! empty( $input['strip_www'] );
@@ -424,8 +426,7 @@ final class Plugin {
 	 * compatibility and single-site installs.
 	 */
 	private function is_primary_policy_site(): bool {
-		$settings = get_option( 'spx_policy_settings', [] );
-		$primary  = is_array( $settings ) ? (string) ( $settings['primary_policy_host'] ?? '' ) : '';
+		$primary = $this->get_primary_policy_host();
 
 		if ( '' === $primary ) {
 			return true;
@@ -437,6 +438,20 @@ final class Plugin {
 		}
 
 		return $this->normalize_site_host( $current ) === $this->normalize_site_host( $primary );
+	}
+
+	/**
+	 * Returns the configured primary policy host.
+	 */
+	private function get_primary_policy_host(): string {
+		$settings = get_option( 'spx_policy_settings', [] );
+		$primary  = is_array( $settings ) ? (string) ( $settings['primary_policy_host'] ?? '' ) : '';
+
+		if ( '' === $primary ) {
+			return '';
+		}
+
+		return $this->normalize_site_host( $primary );
 	}
 
 	/**
