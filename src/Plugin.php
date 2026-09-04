@@ -137,7 +137,7 @@ final class Plugin {
 		add_action( 'save_post_page',               [ $render_cache, 'invalidate_on_policy_save' ],  10, 2 );
 		add_action( 'save_post_post',               [ $render_cache, 'invalidate_on_policy_save' ],  10, 2 );
 		add_action( 'edited_spx_policy_key',        [ $render_cache, 'invalidate_all' ] );
-		add_action( 'update_option_spx_policy_settings', [ $render_cache, 'invalidate_all' ] );
+		add_action( 'update_option_spx_policy_settings', [ $render_cache, 'invalidate_all' ], 10, 0 );
 	}
 
 	private function register_admin_hooks(): void {
