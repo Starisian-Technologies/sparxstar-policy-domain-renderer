@@ -171,8 +171,7 @@ final class PolicyContentFilter {
 		}
 
 		// Preview mode: always noindex.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( isset( $_GET['spx_policy_profile'] ) ) {
+		if ( $this->is_preview_request() ) {
 			echo '<meta name="robots" content="noindex, nofollow" />' . "\n";
 			return;
 		}
@@ -211,8 +210,7 @@ final class PolicyContentFilter {
 		}
 
 		// Do not cache preview requests.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( isset( $_GET['spx_policy_profile'] ) ) {
+		if ( $this->is_preview_request() ) {
 			nocache_headers();
 			header( 'X-Robots-Tag: noindex, nofollow' );
 			return;
@@ -240,12 +238,7 @@ final class PolicyContentFilter {
 	 * @return array{host: string, profile: WP_Post, policy_post: WP_Post|null, policy_key: string}|null
 	 */
 	private function build_preview_context(): ?array {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! isset( $_GET['spx_policy_profile'] ) ) {
-			return null;
-		}
-
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! $this->is_preview_request() ) {
 			return null;
 		}
 
@@ -398,5 +391,13 @@ final class PolicyContentFilter {
 		$cache_enabled = get_post_meta( $profile->ID, 'cache_enabled', true );
 
 		return ! in_array( $cache_enabled, [ '0', 'false', false, 0 ], true );
+	}
+
+	/**
+	 * Returns true when the current request is an authorized admin preview.
+	 */
+	private function is_preview_request(): bool {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return isset( $_GET['spx_policy_profile'] ) && current_user_can( 'manage_options' );
 	}
 }

@@ -184,6 +184,9 @@ final class PolicyResolver {
 			'post_type'      => [ 'page', 'post' ],
 			'post_status'    => 'publish',
 			'posts_per_page' => 1,
+			'orderby'        => 'meta_value_num',
+			'meta_key'       => 'spx_policy_priority', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'order'          => 'DESC',
 			'tax_query'      => [
 				[
 					'taxonomy' => PolicyKeyTaxonomy::TAXONOMY,
